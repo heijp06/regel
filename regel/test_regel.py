@@ -1,5 +1,6 @@
 import pytest
-from .regel import const, eq, ne, regel, split
+from .regel import regel
+from .converters import const, eq, ne, split
 
 
 def test_string_field():
