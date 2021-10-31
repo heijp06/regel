@@ -144,12 +144,10 @@ def test_backslash_before_open_brace():
 
 
 def test_2020_day7_contains_other():
-    class Contents(regel("Contents", "{number:int} {c1} {c2} bag")):
-        def __init__(self, row):
-            super().__init__(row)
-            self.color = f"{self.c1} {self.c2}"
+    class Contents(regel("Contents", r"{number,\d+:int} {color,\w+ \w+} bag")):
+        pass
 
-    class Bag(regel("Bag", "{color} bags contain {contents:split(', ', 's, ')::Contents}.")):
+    class Bag(regel("Bag", "{color} bags contain {contents:Contents._parse_many}.")):
         pass
 
     bag = Bag("light red bags contain 1 bright white bag, 2 muted yellow bags.")
@@ -162,7 +160,7 @@ def test_2020_day7_contains_other():
     assert bag.contents[1].color == "muted yellow"
 
 
-def test_2020_day7_contains_other():
+def test_2020_day7_contains_no_other():
     class Bag(regel("Bag", "{color} bags contain no {contents:const([])}.")):
         pass
 
