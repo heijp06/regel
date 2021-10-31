@@ -25,7 +25,7 @@ def parse(pattern, globals, locals):
 @generate
 def _regel():
     head = yield _text
-    tail = yield many(_field_with_funcs + _text)
+    tail = yield many(_field + _text)
     fields, texts = zip(*tail)
     regex = "(.*)".join([head, *(re.escape(text) for text in texts)])
     return regex, fields
@@ -69,7 +69,7 @@ def _colon():
 
 
 @generate
-def _field_with_funcs():
+def _field():
     yield string("{")
     identifier = yield _identifier
     funcs = yield many(_converter)
