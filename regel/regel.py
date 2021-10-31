@@ -8,7 +8,7 @@ _MODULE = "module"
 def regel(typename, pattern):
     def _init(self, text=None):
         if text:
-            self._setattrs(self, self._get_match(text))
+            self._rule.apply(lambda: self, text)
 
     try:
         caller = sys._getframe(1)
@@ -20,18 +20,14 @@ def regel(typename, pattern):
         locals = {}
         module = __name__
 
-    regex, fields = parser.parse(pattern, globals, locals)
+    rule = parser.parse(pattern, globals, locals)
 
     namespace = {
         "__module__": module,
         "__init__": _init,
-        "_setattrs": _setattrs,
-        "_regex": re.compile(regex),
-        "_fields": fields,
+        "_rule": rule,
         "_parse": _parse,
-        "_get_match": _get_match,
         "_parse_many": _parse_many,
-        "_pattern": pattern,
     }
 
     return type(typename, (), namespace)
@@ -39,25 +35,9 @@ def regel(typename, pattern):
 
 @classmethod
 def _parse(cls, text):
-    return cls._setattrs(cls(), cls._get_match(text))
-
-
-@classmethod
-def _get_match(cls, text):
-    match = cls._regex.search(text)
-    if not match:
-        raise ValueError(
-            f"Text '{text}' does not match pattern '{cls._pattern}'")
-    return match
+    return cls._rule.apply(cls, text)
 
 
 @classmethod
 def _parse_many(cls, text):
-    return [cls._setattrs(cls(), m) for m in cls._regex.finditer(text)]
-
-
-@classmethod
-def _setattrs(cls, instance, match):
-    for field, text in zip(cls._fields, match.groups()):
-        field.set_value(instance, text)
-    return instance
+    return cls._rule.apply_many(cls, text)

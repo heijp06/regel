@@ -2,6 +2,7 @@ import re
 from parsec import ParseError, digit, generate, letter, many, none_of, string
 from .converter import Converter
 from .field import Field
+from .rule import Rule
 
 
 def parse(pattern, globals, locals):
@@ -19,7 +20,7 @@ def parse(pattern, globals, locals):
 
         field.compile(globals, locals)
 
-    return regex, fields
+    return Rule(regex, fields, pattern)
 
 
 @generate
