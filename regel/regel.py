@@ -77,5 +77,4 @@ def _apply_many(cls, funcs, string):
 
 @classmethod
 def _apply(_, value, applFunc):
-    application, func = applFunc
-    return func(value) if application == ':' else [func(elem) for elem in value]
+    return applFunc.convert(value)

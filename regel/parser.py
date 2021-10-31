@@ -1,10 +1,11 @@
 import re
 from parsec import ParseError, digit, generate, letter, many, none_of, string
+from .converter import Converter
 
 
 def parse(pattern, globals, locals):
     try:
-        regex, fields, funcLists = _regel.parse_strict(pattern)
+        regex, fields, converterLists = _regel.parse_strict(pattern)
     except ParseError as err:
         raise ValueError(
             f"Error parsing pattern '{pattern}' at position {err.loc()}.")
@@ -15,16 +16,11 @@ def parse(pattern, globals, locals):
             raise ValueError(f"Duplicate field '{field}'.")
         seen.add(field)
 
-    funcLists = [
-        [
-            (application, eval(func, globals, locals))
-            for (application, func)
-            in funcs
-        ]
-        for funcs in funcLists
-    ]
+    for converterList in converterLists:
+        for converter in converterList:
+            converter.compile(globals, locals)
 
-    return regex, fields, funcLists
+    return regex, fields, converterLists
 
 
 @generate
@@ -78,9 +74,18 @@ def _colon():
 def _field_with_funcs():
     yield string("{")
     identifier = yield _identifier
-    funcs = yield many((string("::") ^ string(":")) + _func)
+    funcs = yield many(_converter)
     yield string("}")
     return identifier, funcs
+
+
+@generate
+def _converter():
+    colons, text = yield (string("::") ^ string(":")) + _func
+    application = (
+        Converter.APPLICATION_SINGLE if len(colons) == 1
+        else Converter.APPLICATION_MANY)
+    return Converter(text, application)
 
 
 @generate
