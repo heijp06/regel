@@ -27,7 +27,7 @@ def _regel():
     head = yield _text
     tail = yield many(_field_with_funcs + _text)
     fields, texts = zip(*tail)
-    regex = "(.*)".join([head, *[re.escape(text) for text in texts]])
+    regex = "(.*)".join([head, *(re.escape(text) for text in texts)])
     return regex, fields
 
 
