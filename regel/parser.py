@@ -1,36 +1,34 @@
 import re
 from parsec import ParseError, digit, generate, letter, many, none_of, string
 from .converter import Converter
+from .field import Field
 
 
 def parse(pattern, globals, locals):
     try:
-        regex, fields, converterLists = _regel.parse_strict(pattern)
+        regex, fields = _regel.parse_strict(pattern)
     except ParseError as err:
         raise ValueError(
             f"Error parsing pattern '{pattern}' at position {err.loc()}.")
 
     seen = set()
     for field in fields:
-        if field in seen:
-            raise ValueError(f"Duplicate field '{field}'.")
-        seen.add(field)
+        if field.name in seen:
+            raise ValueError(f"Duplicate field name '{field.name}'.")
+        seen.add(field.name)
 
-    for converterList in converterLists:
-        for converter in converterList:
-            converter.compile(globals, locals)
+        field.compile(globals, locals)
 
-    return regex, fields, converterLists
+    return regex, fields
 
 
 @generate
 def _regel():
     head = yield _text
     tail = yield many(_field_with_funcs + _text)
-    regex = "(.*)".join([head, *[re.escape(t) for _, t in tail]])
-    fields = [f[0] for f, _ in tail]
-    funcs = [f[1] for f, _ in tail]
-    return regex, fields, funcs
+    regex = "(.*)".join([head, *[re.escape(text) for _, text in tail]])
+    fields = [field for field, _ in tail]
+    return regex, fields
 
 
 @generate
@@ -76,7 +74,7 @@ def _field_with_funcs():
     identifier = yield _identifier
     funcs = yield many(_converter)
     yield string("}")
-    return identifier, funcs
+    return Field(identifier, funcs)
 
 
 @generate

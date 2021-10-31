@@ -6,6 +6,10 @@ class Converter:
         self.text = text
         self.application = application
         self._function = None
+    
+    def __repr__(self):
+        colons = ":" if self.application == Converter.APPLICATION_SINGLE else "::"
+        return colons + self.text
 
     def compile(self, globals, locals):
         self._function = eval(self.text, globals, locals)
