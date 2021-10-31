@@ -178,10 +178,10 @@ def test_2020_day7_bags_with_and_without_contents():
 
 
 def test_parse_many():
-    class Number(regel("Number", "{value:int}, ")):
+    class Number(regel("Number", "{value:int}")):
         pass
 
-    numbers = Number._parse_many("1, 2, 3, ")
+    numbers = Number._parse_many("1, 2, 3")
     
     assert len(numbers) == 3
     assert numbers[0].value == 1

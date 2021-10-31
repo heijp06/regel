@@ -7,14 +7,14 @@ class Field:
         self.converters = converters
 
     def __repr__(self):
-        return self.name + "".join(self.converters)
+        return self.name + "".join(repr(converter) for converter in self.converters)
 
     def convert(self, text):
         return reduce(
             lambda value, converter: converter.convert(value),
             self.converters,
             text)
-    
+
     def compile(self, globals, locals):
         for converter in self.converters:
             converter.compile(globals, locals)

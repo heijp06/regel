@@ -26,8 +26,9 @@ def parse(pattern, globals, locals):
 def _regel():
     head = yield _text
     tail = yield many(_field_with_funcs + _text)
-    regex = "(.*)".join([head, *[re.escape(text) for _, text in tail]])
-    fields = [field for field, _ in tail]
+    fields, texts = zip(*tail)
+    regex = "(.*)".join([head, *[re.escape(text) for text in texts]])
+    # fields = [field for field, _ in tail]
     return regex, fields
 
 
