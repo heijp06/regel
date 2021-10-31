@@ -28,7 +28,6 @@ def _regel():
     tail = yield many(_field_with_funcs + _text)
     fields, texts = zip(*tail)
     regex = "(.*)".join([head, *[re.escape(text) for text in texts]])
-    # fields = [field for field, _ in tail]
     return regex, fields
 
 
