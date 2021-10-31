@@ -2,9 +2,10 @@ from functools import reduce
 
 
 class Field:
-    def __init__(self, name, converters):
+    def __init__(self, name, converters, regex):
         self.name = name
         self.converters = converters
+        self.regex = regex
 
     def __repr__(self):
         return self.name + "".join(repr(converter) for converter in self.converters)

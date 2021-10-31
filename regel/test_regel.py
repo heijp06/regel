@@ -178,7 +178,7 @@ def test_2020_day7_bags_with_and_without_contents():
 
 
 def test_parse_many():
-    class Number(regel("Number", r"{value,\\d+:int}")):
+    class Number(regel("Number", r"{value,\d+:int}")):
         pass
 
     numbers = Number._parse_many("1, 2, 3")
