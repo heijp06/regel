@@ -144,12 +144,12 @@ def test_backslash_before_open_brace():
 
 
 def test_2020_day7_contains_other():
-    class Contents(regel('Contents', "{number:int} {c1} {c2} bag")):
+    class Contents(regel("Contents", "{number:int} {c1} {c2} bag")):
         def __init__(self, row):
             super().__init__(row)
             self.color = f"{self.c1} {self.c2}"
 
-    class Bag(regel('Bag', "{color} bags contain {contents:split(', ', 's, ')::Contents}.")):
+    class Bag(regel("Bag", "{color} bags contain {contents:split(', ', 's, ')::Contents}.")):
         pass
 
     bag = Bag("light red bags contain 1 bright white bag, 2 muted yellow bags.")
@@ -163,7 +163,7 @@ def test_2020_day7_contains_other():
 
 
 def test_2020_day7_contains_other():
-    class Bag(regel('Bag', "{color} bags contain no {contents:const([])}.")):
+    class Bag(regel("Bag", "{color} bags contain no {contents:const([])}.")):
         pass
 
     bag = Bag("faded blue bags contain no other bags.")
@@ -175,6 +175,19 @@ def test_2020_day7_contains_other():
 @pytest.mark.skip("TODO")
 def test_2020_day7_bags_with_and_without_contents():
     pass
+
+
+@pytest.mark.skip("TODO")
+def test_get_many():
+    class Number(regel("Number", "{value,\d+:int}")):
+        pass
+
+    numbers = Number._parse_many("1, 2, 3")
+    
+    assert len(numbers) == 3
+    assert numbers[0].value == 1
+    assert numbers[1].value == 2
+    assert numbers[2].value == 3
 
 # 2020 day 4, passport, dictionary
 # 2020 day 7, shiny gold bag, list, object
