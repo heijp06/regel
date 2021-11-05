@@ -1,4 +1,5 @@
 import pytest
+import re
 from regel import regel
 from regel.converters import const, eq, ne, split
 
@@ -9,6 +10,10 @@ def test_no_conversions():
 
     actual = [dict(Field._parse_many(passport))
               for passport in passports.split("\n\n")]
+    # actual = [
+    #     dict(match.groups() for match in re.finditer("(\w+):(\S+)", passport))
+    #     for passport
+    #     in passports.split("\n\n")]
 
     expected = [
         {"ecl": "gry", "pid": "860033327", "eyr": "2020", "hcl": "#fffffd",
