@@ -25,6 +25,9 @@ class Rule:
         return match
 
     def _setattrs(self, instance, match):
+        items = []
         for field, text in zip(self.fields, match.groups()):
             field.set_value(instance, text)
+            items.append(field.get_value(instance))
+        instance._items = iter(items)
         return instance

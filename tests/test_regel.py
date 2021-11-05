@@ -150,3 +150,10 @@ def test_parse_many():
     assert numbers[0].value == 1
     assert numbers[1].value == 2
     assert numbers[2].value == 3
+
+def test_iter():
+    obj = regel("Obj", "{field1} {field2}")._parse("a b")
+
+    items = [item for item in obj]
+
+    assert items == ["a", "b"]

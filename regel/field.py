@@ -27,3 +27,6 @@ class Field:
     def set_value(self, instance, text):
         value = self.convert(text)
         setattr(instance, self.name, value)
+
+    def get_value(self, instance):
+        return getattr(instance, self.name)

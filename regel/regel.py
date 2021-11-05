@@ -9,6 +9,9 @@ def regel(typename, pattern):
     def _init(self, text=None):
         if text:
             self._rule.apply(lambda: self, text)
+    
+    def _iter(self):
+        return self._items
 
     try:
         caller = sys._getframe(1)
@@ -25,6 +28,7 @@ def regel(typename, pattern):
     namespace = {
         "__module__": module,
         "__init__": _init,
+        "__iter__": _iter,
         "_rule": rule,
         "_parse": _parse,
         "_parse_many": _parse_many,
