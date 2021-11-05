@@ -161,6 +161,7 @@ def test_iter():
 
 
 def test_dict():
-    obj = regel("Obj", "{field1,\w+}: {field2,\d+:int}")._parse_many("a: 1, b: 2")
+    obj = regel(
+        "Obj", "{field1,\w+}: {field2,\d+:int}")._parse_many("a: 1, b: 2")
 
     assert dict(obj) == {"a": 1, "b": 2}

@@ -34,7 +34,7 @@ def test_bags_with_and_without_contents():
     class Contents(regel("Contents", r"{number,\d+:int} {color,\w+ \w+} bag")):
         pass
 
-    class Bag(regel("Bag", "{color} bags contain {contents:Contents._parse_many}.")):
+    class Bag(regel("Bag", "{color,\w+ \w+} bags contain {contents:Contents._parse_many}.")):
         pass
 
     bags = Bag._parse_many("""
