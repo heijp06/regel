@@ -151,9 +151,16 @@ def test_parse_many():
     assert numbers[1].value == 2
     assert numbers[2].value == 3
 
+
 def test_iter():
     obj = regel("Obj", "{field1} {field2}")._parse("a b")
 
     items = [item for item in obj]
 
     assert items == ["a", "b"]
+
+
+def test_dict():
+    obj = regel("Obj", "{field1,\w+}: {field2,\d+:int}")._parse_many("a: 1, b: 2")
+
+    assert dict(obj) == {"a": 1, "b": 2}

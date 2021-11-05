@@ -29,5 +29,5 @@ class Rule:
         for field, text in zip(self.fields, match.groups()):
             field.set_value(instance, text)
             items.append(field.get_value(instance))
-        instance._items = iter(items)
+        instance._items = tuple(items)
         return instance

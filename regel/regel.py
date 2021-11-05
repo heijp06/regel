@@ -11,7 +11,7 @@ def regel(typename, pattern):
             self._rule.apply(lambda: self, text)
     
     def _iter(self):
-        return self._items
+        return iter(self._items)
 
     try:
         caller = sys._getframe(1)
