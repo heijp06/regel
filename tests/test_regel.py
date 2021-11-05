@@ -28,19 +28,6 @@ def test_group_in_pattern():
     assert obj.field == "value"
 
 
-def test_2015_day13_seating():
-    Seating = regel(
-        "Seating",
-        "{guest1} would {gain:eq('gain')} {happiness:int} happiness units by sitting next to {guest2}."
-    )
-    seating = Seating._parse(
-        "Alice would gain 54 happiness units by sitting next to Bob.")
-    assert seating.guest1 == "Alice"
-    assert seating.gain == True
-    assert seating.happiness == 54
-    assert seating.guest2 == "Bob"
-
-
 def test_local_function():
     def f(x):
         return 1 + int(x)
@@ -153,38 +140,6 @@ def test_no_named_capturing_groups():
         _ = regel("Obj", r"{field,(?P<char>.)(?P=char)}")
 
 
-def test_2020_day7_contains_other():
-    class Contents(regel("Contents", r"{number,\d+:int} {color,\w+ \w+} bag")):
-        pass
-
-    class Bag(regel("Bag", "{color} bags contain {contents:Contents._parse_many}.")):
-        pass
-
-    bag = Bag("light red bags contain 1 bright white bag, 2 muted yellow bags.")
-
-    assert bag.color == "light red"
-    assert len(bag.contents) == 2
-    assert bag.contents[0].number == 1
-    assert bag.contents[0].color == "bright white"
-    assert bag.contents[1].number == 2
-    assert bag.contents[1].color == "muted yellow"
-
-
-def test_2020_day7_contains_no_other():
-    class Bag(regel("Bag", "{color} bags contain no {contents:const([])}.")):
-        pass
-
-    bag = Bag("faded blue bags contain no other bags.")
-
-    assert bag.color == "faded blue"
-    assert len(bag.contents) == 0
-
-
-@pytest.mark.skip("TODO")
-def test_2020_day7_bags_with_and_without_contents():
-    pass
-
-
 def test_parse_many():
     class Number(regel("Number", r"{value,\d+:int}")):
         pass
@@ -195,7 +150,3 @@ def test_parse_many():
     assert numbers[0].value == 1
     assert numbers[1].value == 2
     assert numbers[2].value == 3
-
-# 2020 day 4, passport, dictionary
-# 2020 day 7, shiny gold bag, list, object
-# 2020 day 14, bitmask program
