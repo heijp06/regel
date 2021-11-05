@@ -143,6 +143,16 @@ def test_backslash_before_open_brace():
     assert obj.filename == "readme.txt"
 
 
+def test_no_unnamed_capturing_groups():
+    with pytest.raises(ValueError):
+        _ = regel("Obj", r"{field,(.)\1}")
+
+
+def test_no_named_capturing_groups():
+    with pytest.raises(ValueError):
+        _ = regel("Obj", r"{field,(?P<char>.)(?P=char)}")
+
+
 def test_2020_day7_contains_other():
     class Contents(regel("Contents", r"{number,\d+:int} {color,\w+ \w+} bag")):
         pass
@@ -180,7 +190,7 @@ def test_parse_many():
         pass
 
     numbers = Number._parse_many("1, 2, 3")
-    
+
     assert len(numbers) == 3
     assert numbers[0].value == 1
     assert numbers[1].value == 2

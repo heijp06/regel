@@ -1,3 +1,4 @@
+import re
 from functools import reduce
 
 
@@ -6,6 +7,9 @@ class Field:
         self.name = name
         self.converters = converters
         self.regex = regex
+        if re.compile(regex).groups:
+            raise ValueError(
+                f"Capturing groups in regex are not supported (field = '{name}', regex = '{regex}').")
 
     def __repr__(self):
         return self.name + "".join(repr(converter) for converter in self.converters)
